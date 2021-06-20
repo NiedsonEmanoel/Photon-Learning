@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const StudentSchema = new mongoose.Schema({
+const TeacherSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -25,9 +25,9 @@ const StudentSchema = new mongoose.Schema({
         type: Array,
         default: []
     },
-    coursesProgress: {
-        type: Object,
-        default: {}
+    idCoursesAdmin: {
+        type: Array,
+        default: []
     },
     address: {
         street: {
@@ -63,7 +63,7 @@ const StudentSchema = new mongoose.Schema({
     timestamps: true
 });
 
-StudentSchema.pre('save', function (next) {
+TeacherSchema.pre('save', function (next) {
     if (!this.isModified("password")) {
         return next();
     }
@@ -71,7 +71,7 @@ StudentSchema.pre('save', function (next) {
     next();
 });
 
-StudentSchema.pre('findOneAndUpdate', function (next) {
+TeacherSchema.pre('findOneAndUpdate', function (next) {
     var passworda = this.getUpdate().password + '';
     if (passworda.length < 55) {
         this.getUpdate().password = bcrypt.hashSync(passworda, 10);
@@ -79,7 +79,7 @@ StudentSchema.pre('findOneAndUpdate', function (next) {
     next();
 });
 
-StudentSchema.methods.isCorrectPassword = function (passworda, callback) {
+TeacherSchema.methods.isCorrectPassword = function (passworda, callback) {
     bcrypt.compare(passworda, this.password, function (err, same) {
         if (err) {
             callback(err);
@@ -89,4 +89,4 @@ StudentSchema.methods.isCorrectPassword = function (passworda, callback) {
     })
 }
 
-module.exports = StudentSchema;
+module.exports = TeacherSchema;
